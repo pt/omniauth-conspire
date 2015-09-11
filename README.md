@@ -1,6 +1,6 @@
 # OmniAuth Conspire
 
-This gem contains the Conspire strategy for OmniAuth using OAuth2.
+This gem contains the [Conspire API](http://docs.conspireapi.apiary.io/) strategy for OmniAuth using OAuth2.
 
 ## Before You Begin
 
@@ -20,9 +20,9 @@ Next, tell OmniAuth about this provider. For a Rails app, your `config/initializ
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :conspire, "CLIENT_ID", "API_SECRET",
+  provider :conspire, CLIENT_ID, CLIENT_SECRET,
                               :scope => 'core',
-                              :rectirect_url => 'your app',
+                              :redirect_url => REDIRECT_URL,
                               :provider_ignores_state => true
 end
 ```
@@ -31,9 +31,9 @@ If you are using the strategy with devise you can configure it like this:
 
 ```ruby
 Devise.setup do |config|
-  config.omniauth :conspire, "client_id", "secret",
+  config.omniauth :conspire, CLIENT_ID, CLIENT_SECRET,
                               :scope => 'core',
-                              :rectirect_url => 'my_app_callback',
+                              :redirect_url => REDIRECT_URL,
                               :provider_ignores_state => true
 end
 ```
@@ -48,8 +48,8 @@ Conspire tokens expire after 60 minutes. You will need to refresh tokens manuall
 url       = URI("https://www.conspire.com/oauth2/token")
 response  = Net::HTTP.post_form(url,
               { 'refresh_token' => refresh_token, #stored from original authorization
-                'client_id' => CONSPIRE_CLIENT_ID,
-                'client_secret' => CONSPIRE_SECRET,
+                'client_id' => CLIENT_ID,
+                'client_secret' => CLIENT_SECRET,
                 'grant_type' => 'refresh_token'}
             )
 data      = JSON.parse(response.body)
